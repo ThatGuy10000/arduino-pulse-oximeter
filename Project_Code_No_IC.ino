@@ -4,7 +4,7 @@
 //Input Parameters
 const int stabilityDelay = 5;
 const int collectedSamples = 10;
-const boolean serialDisplay = true;
+const boolean serialDisplay = false;
 
 //Declare Pin Numbers
 const int SDAPin = A4;
