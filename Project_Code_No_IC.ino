@@ -34,9 +34,21 @@ void setup() {
 }
 
 void loop() {
+  beginning: //Tag for "goto"
+  
   float redVal = readAbsorbance("Red"); //Store absorbance voltage for red LED in "redVal"
   float irVal = readAbsorbance("IR"); //Store absorbance voltage for IR LED in "irVal"
 
+  digitalWrite(LED_Display, LOW)
+  
+  if(redVal == irVal){
+    digitalWrite(LED_Display, HIGH)
+    goto beginning;
+  }
+  
+  if(redVal == irVal)
+    continue;
+  
   if(SpO2 > 80)
     digitalWrite(LED_Display, LOW); //Turns off LED if SpO2 is greater than 80%
   
