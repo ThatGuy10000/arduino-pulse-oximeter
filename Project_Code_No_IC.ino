@@ -3,7 +3,7 @@
 
 //Input Parameters
 const int stabilityDelay = 5;
-const int collectedSamples = 10;
+const int collectedSamples = 200;
 const float fitFactor = 0.3;
 const boolean serialDisplay = false;
 
