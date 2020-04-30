@@ -72,7 +72,7 @@ void loop() {
   if(count >= collectedSamples)
   {
     rVal = (redAC / redDC) / (irAC / irDC); //Calculates R for the data
-    SpO2 = rVal * (-1.0/3.0) + (3.4 / 3.0); //Calculates SpO2 for the data
+    SpO2 = rVal * 0.3* (-1.0/3.0) + (3.4 / 3.0); //Calculates SpO2 for the data
     
     //Reset all variables
     count = 0;
