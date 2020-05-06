@@ -2,9 +2,10 @@
 #include <Wire.h>
 
 //Input Parameters
-const int stabilityDelay = 5;
-const int collectedSamples = 10;
-const boolean serialDisplay = false;
+const int stabilityDelay = 5; //Delay between turning LED on and reading detector
+const int collectedSamples = 200; //Number of samples collected before calculating/printing SO2
+const float fitFactor = 0.3; //Factor to multiply by R to fit SO2 to the device
+const boolean serialDisplay = false; //Turn on/off serial display
 
 //Declare Pin Numbers
 const int SDAPin = A4;
@@ -12,6 +13,7 @@ const int SCLPin = A5;
 const int LED_RED = 2;
 const int LED_IR = 3;
 const int LED_Display = 4;
+const int LED_Working = 5;
 const int detectorPin = A0;
 
 //Declare Variables for Calculation
@@ -34,9 +36,21 @@ void setup() {
 }
 
 void loop() {
+  beginning: //Tag for "goto"
+  
   float redVal = readAbsorbance("Red"); //Store absorbance voltage for red LED in "redVal"
   float irVal = readAbsorbance("IR"); //Store absorbance voltage for IR LED in "irVal"
 
+  digitalWrite(LED_Working, LOW) //Reset LED_Working
+  
+  if(redVal == irVal){ //If redVal = irVal (typical when device is not on a finger)
+    digitalWrite(LED_Working, HIGH) //Turn on LED_Working
+    goto beginning; //Restart loop
+  }
+  
+  if(redVal == irVal)
+    continue;
+  
   if(SpO2 > 80)
     digitalWrite(LED_Display, LOW); //Turns off LED if SpO2 is greater than 80%
   
@@ -60,7 +74,7 @@ void loop() {
   if(count >= collectedSamples)
   {
     rVal = (redAC / redDC) / (irAC / irDC); //Calculates R for the data
-    SpO2 = rVal * (-1.0/3.0) + (3.4 / 3.0); //Calculates SpO2 for the data
+    SpO2 = rVal * fitFactor * (-1.0/3.0) + (3.4 / 3.0); //Calculates SpO2 for the data
     
     //Reset all variables
     count = 0;
